@@ -5,6 +5,7 @@ export interface PokemonListItem {
     nationalDexNumber: number;
     generationCode: string;
     implemented: boolean;
+    spriteUrl: string | null;
 }
 
 export interface PokemonForm {
@@ -24,6 +25,8 @@ export interface PokemonForm {
 }
 
 export interface PokemonDetails extends PokemonListItem {
+    spriteUrl: string | null;
+    iconUrl: string | null;
     forms: PokemonForm[];
 }
 

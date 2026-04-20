@@ -3,9 +3,10 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'raw.githubusercontent.com',
-        pathname: '/PokeAPI/sprites/**',
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '8080',
+        pathname: '/assets/**',
       },
     ],
   },
