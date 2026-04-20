@@ -1,16 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { ROUTES } from '@/lib/constants/routes';
-import { TypeBadge } from '@/components/ui/badge';
 import type { PokemonListItem } from '@/types/api/pokemon.types';
 
 interface PokemonCardProps {
     pokemon: PokemonListItem;
 }
 
-function getSpriteUrl(dexNumber: number): string {
-    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${dexNumber}.png`;
-}
 
 function formatDexNumber(n: number): string {
     return `#${String(n).padStart(4, '0')}`;
@@ -30,7 +26,7 @@ export function PokemonCard({ pokemon }: PokemonCardProps) {
             <div className="relative flex items-center justify-center h-24 mb-3">
                 {pokemon.implemented ? (
                     <Image
-                        src={getSpriteUrl(pokemon.nationalDexNumber)}
+                        src={pokemon.spriteUrl ?? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`}
                         alt={pokemon.displayName}
                         width={96}
                         height={96}

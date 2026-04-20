@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import { TypeBadge } from '@/components/ui/badge';
-import { getSpriteUrl, formatDexNumber, formatGeneration } from '@/lib/utils/pokemon';
+import { formatDexNumber, formatGeneration } from '@/lib/utils/pokemon';
 import type { PokemonDetails, PokemonForm } from '@/types/api/pokemon.types';
 
 interface PokemonHeroProps {
@@ -19,7 +19,7 @@ export function PokemonHero({ pokemon, activeForm }: PokemonHeroProps) {
                 <div className="absolute inset-0 rounded-full bg-white/5" />
                 {pokemon.implemented ? (
                     <Image
-                        src={getSpriteUrl(pokemon.nationalDexNumber)}
+                        src={pokemon.spriteUrl ?? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`}
                         alt={pokemon.displayName}
                         width={160}
                         height={160}

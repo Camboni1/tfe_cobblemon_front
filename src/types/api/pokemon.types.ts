@@ -22,6 +22,19 @@ export interface PokemonForm {
     baseSpecialAttack: number;
     baseSpecialDefense: number;
     baseSpeed: number;
+    drops: PokemonDropItem[];
+}
+
+export interface PokemonDropItem {
+    id: number;
+    itemNamespacedId: string;
+    itemDisplayName: string;
+    itemIsPlaceholder: boolean;
+    quantityMin: number | null;
+    quantityMax: number | null;
+    percentage: number;
+    dropPoolAmountMin: number | null;
+    dropPoolAmountMax: number | null;
 }
 
 export interface PokemonDetails extends PokemonListItem {
