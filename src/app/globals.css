@@ -1,26 +1,25 @@
-@import "../../node_modules/tailwindcss/dist/lib.d.mts";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-bg-base: #0d0d1a;
+  --color-bg-card: #161625;
+  --color-bg-nav: #0a0a15;
+  --color-accent: #e63946;
+  --color-accent-hover: #c1121f;
+  --color-border: #2a2a3e;
+  --color-text-primary: #f0f0f5;
+  --color-text-secondary: #8888aa;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-bg-base);
+  color: var(--color-text-primary);
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
 }
+
+/* Scrollbar discrète */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--color-bg-base); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
