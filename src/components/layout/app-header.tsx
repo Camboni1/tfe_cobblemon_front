@@ -2,62 +2,68 @@ import Link from 'next/link';
 import { ROUTES } from '@/lib/constants/routes';
 import { MainNav } from './main-nav';
 
+/**
+ * Header principal style Pokémon HOME : card blanche arrondie, logo à gauche,
+ * navigation en pilules à droite. Sticky en haut de page.
+ */
 export function AppHeader() {
     return (
-        <header className="sticky top-0 z-50 px-4 pt-4">
-            <div className="mx-auto max-w-[1500px]">
-                <div className="pokedex-panel px-4 py-3 sm:px-5">
-                    <div className="relative z-10 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-                        <div className="flex items-center gap-5">
-                            <Link href={ROUTES.home} className="flex items-center gap-3">
-                                <div className="flex items-center gap-1.5">
-                                    <span
-                                        className="block h-6 w-1 rounded-full"
-                                        style={{ backgroundColor: 'rgba(201, 251, 255, 0.95)' }}
-                                    />
-                                    <span
-                                        className="block h-6 w-1 rounded-full"
-                                        style={{ backgroundColor: 'rgba(116, 228, 255, 0.52)' }}
-                                    />
-                                </div>
+        <header className="sticky top-0 z-50 px-3 pt-4 sm:px-5">
+            <div className="mx-auto max-w-[1180px]">
+                <div
+                    className="home-panel flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between"
+                    style={{ padding: '0.75rem 1.1rem' }}
+                >
+                    <Link href={ROUTES.home} className="flex items-center gap-2.5">
+                        <LogoBadge />
+                        <span
+                            className="text-lg font-bold tracking-tight"
+                            style={{ color: 'var(--color-primary-strong)' }}
+                        >
+                            Cobblemon<span style={{ color: 'var(--color-text-primary)' }}>Dex</span>
+                        </span>
+                    </Link>
 
-                                <span
-                                    className="text-xl font-black tracking-[0.28em] sm:text-2xl"
-                                    style={{
-                                        color: '#d9fcff',
-                                        textShadow: '0 0 12px rgba(116,228,255,0.38)',
-                                    }}
-                                >
-                                    POKEDEX
-                                </span>
-                            </Link>
-
-                            <div
-                                className="hidden text-xs font-semibold uppercase tracking-[0.22em] lg:block"
-                                style={{ color: 'var(--color-text-secondary)' }}
-                            >
-                                Digital Field Index
-                            </div>
-                        </div>
-
-                        <div className="flex items-center gap-3">
-                            <MainNav />
-
-                            <Link
-                                href={ROUTES.admin.root}
-                                className="hidden rounded-full border px-3 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] sm:inline-flex"
-                                style={{
-                                    borderColor: 'var(--color-border)',
-                                    color: 'var(--color-text-secondary)',
-                                    backgroundColor: 'rgba(255,255,255,0.03)',
-                                }}
-                            >
-                                Admin
-                            </Link>
-                        </div>
-                    </div>
+                    <MainNav />
                 </div>
             </div>
         </header>
+    );
+}
+
+/**
+ * Petit logo circulaire turquoise qui évoque (sans imiter) une Pokéball.
+ */
+function LogoBadge() {
+    return (
+        <span
+            aria-hidden="true"
+            style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 34,
+                height: 34,
+                borderRadius: 999,
+                background: 'var(--color-primary)',
+                color: 'white',
+                boxShadow: '0 2px 6px rgba(62, 186, 160, 0.35)',
+            }}
+        >
+            <svg
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+            >
+                <circle cx="12" cy="12" r="9" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <circle cx="12" cy="12" r="2.5" fill="currentColor" stroke="none" />
+            </svg>
+        </span>
     );
 }
