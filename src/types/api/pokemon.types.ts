@@ -6,6 +6,7 @@ export interface PokemonListItem {
     generationCode: string;
     implemented: boolean;
     spriteUrl: string | null;
+    imageUrl: string | null;
 }
 
 export interface PokemonForm {
