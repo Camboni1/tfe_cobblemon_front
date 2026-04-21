@@ -54,6 +54,11 @@ function PokedexContent() {
     });
 
     const entries = data?.content ?? [];
+    const sortedEntries = useMemo(() => {
+        return [...entries].sort(
+            (a, b) => a.nationalDexNumber - b.nationalDexNumber
+        );
+    }, [entries]);
 
     useEffect(() => {
         if (entries.length === 0) {
@@ -98,7 +103,7 @@ function PokedexContent() {
                     <div className="pokedex-scanline" />
                     {activePokemon ? (
                         <div className="relative z-10 flex h-full flex-col">
-                            <div className="flex items-center justify-between gap-3">
+                            <div className="absolute top-6 left-6 right-6 z-20 flex items-center justify-between">
                                 <span className="pokedex-chip">
                                     No. {formatDexNumber(activePokemon.nationalDexNumber)}
                                 </span>
@@ -128,7 +133,7 @@ function PokedexContent() {
                                 )}
                             </div>
 
-                            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+                            <div className="flex flex-col gap-4 sm:flex-row text-center sm:items-end sm:justify-between">
                                 <div>
                                     <span
                                         className="inline-flex rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.14em]"
@@ -452,9 +457,3 @@ function formatGeneration(code: string): string {
     const match = code.match(/\d+/);
     return match ? `GEN ${match[0]}` : code.toUpperCase();
 }
-
-const sortedEntries = useMemo(() => {
-    return [...entries].sort(
-        (a, b) => a.nationalDexNumber - b.nationalDexNumber
-    );
-}, [entries]);
