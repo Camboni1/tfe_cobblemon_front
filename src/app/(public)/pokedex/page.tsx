@@ -108,7 +108,7 @@ function PokedexContent() {
 
                                 {activePokemon.implemented ? (
                                     <Image
-                                        src={spriteSrc(activePokemon)}
+                                        src={imageSrc(activePokemon)}          // ← modifié : imageSrc au lieu de spriteSrc
                                         alt={activePokemon.displayName}
                                         width={360}
                                         height={360}
@@ -422,6 +422,13 @@ export default function PokedexPage() {
 
 function spriteSrc(pokemon: PokemonListItem): string {
     return (
+        pokemon.spriteUrl ??
+        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`
+    );
+}
+function imageSrc(pokemon: PokemonListItem): string {
+    return (
+        pokemon.imageUrl ??
         pokemon.spriteUrl ??
         `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`
     );
