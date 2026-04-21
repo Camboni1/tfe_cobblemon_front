@@ -7,31 +7,60 @@
 @tailwind utilities;
 
 /* ============================================================
-   VARIABLES GLOBALES (PALETTE)
+   VARIABLES GLOBALES — STYLE POKEMON HOME (GuideBook)
    ============================================================ */
 
 :root {
-  /* Fond */
+  /* Fond vert menthe + trame */
   --color-bg-base: #c9e6d4;
-  --color-bg-grid: rgba(255, 255, 255, 0.35);
+  --color-bg-grid: rgba(255, 255, 255, 0.40);
+  --color-bg-grid-strong: rgba(255, 255, 255, 0.55);
+
+  /* Surfaces blanches */
   --color-bg-surface: #ffffff;
-  --color-bg-soft: #effaf3;
+  --color-bg-surface-soft: #f4fbf6;
+  --color-bg-elevated: #ffffff;
 
   /* Accent turquoise HOME */
   --color-primary: #3ebaa0;
   --color-primary-strong: #2d9a84;
   --color-primary-soft: #d4f0e5;
+  --color-primary-softer: #eaf7f1;
+
+  /* Accent secondaire (rouge doux pour alerts) */
+  --color-danger: #e06b6b;
+  --color-warning: #e6a94a;
 
   /* Texte */
-  --color-text-primary: #4a5a5a;
-  --color-text-secondary: #7a8a8a;
-  --color-text-muted: #a0b0b0;
+  --color-text-primary: #3e5050;
+  --color-text-secondary: #6a7b7b;
+  --color-text-muted: #98a8a8;
 
-  /* Bordures et ombres douces */
-  --color-border: rgba(120, 180, 160, 0.18);
-  --color-border-strong: rgba(120, 180, 160, 0.35);
-  --shadow-card: 0 1px 3px rgba(60, 100, 80, 0.06),
-  0 6px 16px rgba(60, 100, 80, 0.08);
+  /* Bordures */
+  --color-border: rgba(62, 186, 160, 0.16);
+  --color-border-strong: rgba(62, 186, 160, 0.32);
+  --color-divider: #e5efe8;
+
+  /* Ombres HOME (très douces, verdâtres) */
+  --shadow-card: 0 1px 2px rgba(60, 100, 80, 0.04),
+  0 4px 12px rgba(60, 100, 80, 0.06);
+  --shadow-card-hover: 0 2px 4px rgba(60, 100, 80, 0.06),
+  0 8px 24px rgba(60, 100, 80, 0.12);
+  --shadow-fab: 0 4px 12px rgba(62, 186, 160, 0.35);
+
+  /* Rayons */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+
+  /* Rétro-compat avec l'ancien thème */
+  --color-bg-card: var(--color-bg-surface);
+  --color-bg-card-strong: var(--color-bg-surface);
+  --color-bg-nav: var(--color-bg-surface);
+  --color-accent: var(--color-primary);
+  --color-accent-strong: var(--color-primary-strong);
+  --color-accent-soft: var(--color-primary-soft);
 }
 
 /* ============================================================
@@ -49,44 +78,20 @@ html {
 body {
   min-height: 100vh;
   color: var(--color-text-primary);
-  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-family: 'Nunito', 'Inter', system-ui, -apple-system, sans-serif;
   background-color: var(--color-bg-base);
   background-image:
-          radial-gradient(circle at 15% 18%, rgba(116, 228, 255, 0.18), transparent 18%),
-          radial-gradient(circle at 82% 10%, rgba(116, 228, 255, 0.10), transparent 14%),
-          linear-gradient(180deg, rgba(255, 255, 255, 0.02), transparent 28%),
-          linear-gradient(180deg, #0a3d63 0%, #0a2842 38%, #071523 100%);
+          linear-gradient(var(--color-bg-grid) 1px, transparent 1px),
+          linear-gradient(90deg, var(--color-bg-grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  background-position: 0 0;
+  background-attachment: fixed;
 }
 
-/* Scanlines subtiles sur tout le fond */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0.18;
-  background: repeating-linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.035) 0px,
-          rgba(255, 255, 255, 0.035) 1px,
-          transparent 1px,
-          transparent 4px
-  );
-}
-
-/* Points d'étoiles en bas de page */
+/* Neutralisation de l'ancien fond sombre */
+body::before,
 body::after {
-  content: '';
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 34vh;
-  pointer-events: none;
-  opacity: 0.28;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.7) 0.8px, transparent 0.8px);
-  background-size: 18px 18px;
-  mask-image: linear-gradient(180deg, transparent, black 28%);
+  display: none !important;
 }
 
 a {
@@ -102,8 +107,8 @@ textarea {
 }
 
 ::selection {
-  background: rgba(116, 228, 255, 0.28);
-  color: #ffffff;
+  background: var(--color-primary-soft);
+  color: var(--color-text-primary);
 }
 
 /* ============================================================
@@ -116,107 +121,555 @@ textarea {
 }
 
 ::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.02);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(120, 214, 255, 0.24);
+  background: rgba(62, 186, 160, 0.28);
   border-radius: 999px;
 }
 
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(62, 186, 160, 0.5);
+}
+
 /* ============================================================
-   POKEDEX — PANEL DE BASE (conteneur principal)
+   HOME — PANELS (cards blanches)
+   ============================================================ */
+
+.home-panel {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  padding: 1.25rem;
+}
+
+.home-panel-flat {
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+}
+
+.home-panel-soft {
+  background: var(--color-bg-surface-soft);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+/* ============================================================
+   HOME — TITRES
+   ============================================================ */
+
+.home-page-title {
+  font-family: 'Nunito', 'Inter', sans-serif;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--color-primary-strong);
+  text-align: center;
+  letter-spacing: 0;
+  margin: 0;
+}
+
+.home-section-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ============================================================
+   HOME — BARRE DE RECHERCHE TURQUOISE (style bandeau HOME)
+   ============================================================ */
+
+.home-search-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  width: 100%;
+  height: 52px;
+  padding: 0 1.25rem;
+  background: var(--color-primary);
+  color: white;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: text;
+  transition: background-color 150ms ease;
+  box-shadow: 0 2px 6px rgba(62, 186, 160, 0.22);
+}
+
+.home-search-bar:focus-within,
+.home-search-bar:hover {
+  background: var(--color-primary-strong);
+}
+
+.home-search-bar input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 0.95rem;
+  font-weight: 600;
+  outline: none;
+  padding: 0;
+}
+
+.home-search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.home-search-bar svg {
+  flex-shrink: 0;
+  opacity: 0.92;
+}
+
+/* Variant : champ clair (fond blanc, bordure turquoise) */
+.home-input {
+  width: 100%;
+  height: 44px;
+  padding: 0 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font-size: 0.92rem;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.home-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.home-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* ============================================================
+   HOME — POKEMON CARD (tuile de la grille)
+   ============================================================ */
+
+.home-pokemon-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  padding: 0.85rem 0.55rem 0.9rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  cursor: pointer;
+  overflow: hidden;
+  text-align: center;
+}
+
+.home-pokemon-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.home-pokemon-card-image {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem;
+}
+
+.home-pokemon-card-image img {
+  max-height: 100%;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 6px rgba(60, 100, 80, 0.15));
+  transition: transform 200ms ease;
+}
+
+.home-pokemon-card:hover .home-pokemon-card-image img {
+  transform: scale(1.06);
+}
+
+.home-pokemon-card-dex {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--color-text-muted);
+  margin-top: 0.4rem;
+  letter-spacing: 0.01em;
+}
+
+.home-pokemon-card-name {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-top: 0.15rem;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.home-pokemon-card-empty {
+  opacity: 0.55;
+}
+
+.home-pokemon-card-placeholder {
+  width: 56%;
+  height: 56%;
+  border-radius: 999px;
+  background: var(--color-bg-surface-soft);
+  border: 2px dashed var(--color-border-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+/* ============================================================
+   HOME — BOUTONS FLOTTANTS (FAB turquoise rond)
+   ============================================================ */
+
+.home-fab {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 999px;
+  background: var(--color-primary);
+  color: white;
+  border: none;
+  box-shadow: var(--shadow-fab);
+  transition: background-color 150ms ease, transform 150ms ease, box-shadow 150ms ease;
+  cursor: pointer;
+}
+
+.home-fab:hover {
+  background: var(--color-primary-strong);
+  box-shadow: 0 6px 16px rgba(62, 186, 160, 0.45);
+}
+
+.home-fab:active {
+  transform: translateY(1px);
+}
+
+.home-fab:disabled {
+  background: var(--color-text-muted);
+  box-shadow: none;
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.home-fab-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 2px solid var(--color-primary);
+  background: var(--color-bg-surface);
+  color: var(--color-primary);
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.home-fab-outline:hover {
+  background: var(--color-primary-soft);
+}
+
+/* Bouton rectangulaire plein */
+.home-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-primary);
+  color: white;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border: none;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+.home-btn:hover {
+  background: var(--color-primary-strong);
+}
+
+.home-btn:disabled {
+  background: var(--color-text-muted);
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.home-btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  font-size: 0.88rem;
+  border: 1px solid var(--color-border-strong);
+  cursor: pointer;
+  transition: border-color 150ms ease, color 150ms ease, background-color 150ms ease;
+}
+
+.home-btn-ghost:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary-strong);
+  background: var(--color-primary-softer);
+}
+
+/* ============================================================
+   HOME — CHIPS / TOGGLES / SELECT
+   ============================================================ */
+
+.home-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: 999px;
+  background: var(--color-bg-surface-soft);
+  color: var(--color-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+}
+
+.home-chip-primary {
+  background: var(--color-primary-soft);
+  color: var(--color-primary-strong);
+  border-color: var(--color-border-strong);
+}
+
+.home-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
+  color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 150ms ease;
+}
+
+.home-toggle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-text-primary);
+}
+
+.home-toggle-active {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+.home-toggle-active:hover {
+  color: white;
+  background: var(--color-primary-strong);
+}
+
+.home-select {
+  width: 100%;
+  height: 44px;
+  padding: 0 2.5rem 0 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background-color: var(--color-bg-surface);
+  color: var(--color-text-primary);
+  font-size: 0.9rem;
+  font-weight: 500;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%233ebaa0' d='M6 8L0 2l1.5-1.5L6 5l4.5-4.5L12 2z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.home-select:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
+}
+
+/* ============================================================
+   HOME — BADGES DE TYPE POKEMON (couleurs officielles)
+   ============================================================ */
+
+.home-type-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: white;
+  letter-spacing: 0.02em;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  min-width: 70px;
+}
+
+.home-type-normal   { background: #9fa4af; }
+.home-type-fire     { background: #f08030; }
+.home-type-water    { background: #6890f0; }
+.home-type-grass    { background: #78c850; }
+.home-type-electric { background: #f8d030; color: #4a3000; }
+.home-type-ice      { background: #98d8d8; color: #1a4a4a; }
+.home-type-fighting { background: #c03028; }
+.home-type-poison   { background: #a040a0; }
+.home-type-ground   { background: #e0c068; color: #4a3000; }
+.home-type-flying   { background: #a890f0; }
+.home-type-psychic  { background: #f85888; }
+.home-type-bug      { background: #a8b820; }
+.home-type-rock     { background: #b8a038; }
+.home-type-ghost    { background: #705898; }
+.home-type-dragon   { background: #7038f8; }
+.home-type-dark     { background: #705848; }
+.home-type-steel    { background: #b8b8d0; color: #2a2a3a; }
+.home-type-fairy    { background: #ee99ac; }
+
+/* ============================================================
+   HOME — ÉTATS (loading, empty)
+   ============================================================ */
+
+.home-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 3.5rem 1rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  gap: 0.5rem;
+}
+
+.home-empty-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.home-empty-desc {
+  font-size: 0.88rem;
+  color: var(--color-text-secondary);
+}
+
+/* ============================================================
+   HOME — ANIMATIONS
+   ============================================================ */
+
+@keyframes home-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.home-fade-in {
+  animation: home-fade-in 260ms ease-out both;
+}
+
+@keyframes home-spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.home-spinner {
+  width: 36px;
+  height: 36px;
+  border: 3px solid var(--color-primary-soft);
+  border-top-color: var(--color-primary);
+  border-radius: 999px;
+  animation: home-spin 900ms linear infinite;
+}
+
+/* ============================================================
+   RÉTRO-COMPAT — Anciennes classes `pokedex-*` restylées HOME
+   ============================================================
+   Garde le rendu cohérent pendant la migration. À supprimer
+   progressivement une fois tous les composants migrés en `home-*`.
    ============================================================ */
 
 .pokedex-panel {
   position: relative;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  border: none;
+  box-shadow: var(--shadow-card);
   overflow: hidden;
-  border-radius: 22px;
-  border: 1px solid var(--color-border);
-  background: linear-gradient(180deg, rgba(20, 66, 99, 0.96) 0%, rgba(10, 36, 59, 0.96) 100%);
-  box-shadow:
-          0 18px 44px rgba(0, 0, 0, 0.28),
-          inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(10px);
 }
 
-.pokedex-panel::before {
-  content: '';
-  position: absolute;
-  inset: 1px;
-  border-radius: 21px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  pointer-events: none;
-}
-
+.pokedex-panel::before,
 .pokedex-panel::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  opacity: 0.18;
-  pointer-events: none;
-  background: repeating-linear-gradient(
-          180deg,
-          rgba(255, 255, 255, 0.02) 0px,
-          rgba(255, 255, 255, 0.02) 1px,
-          transparent 1px,
-          transparent 5px
-  );
+  display: none !important;
 }
-
-/* ============================================================
-   POKEDEX — TABS, CHIPS ET ÉLÉMENTS DE NAVIGATION
-   ============================================================ */
 
 .pokedex-tab {
   display: inline-flex;
   align-items: center;
+  padding: 0.5rem 1rem;
   border-radius: 999px;
-  border: 1px solid rgba(120, 214, 255, 0.16);
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.45rem 0.9rem;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
+  background: var(--color-bg-surface-soft);
   color: var(--color-text-secondary);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  text-transform: none;
+  letter-spacing: 0;
 }
 
 .pokedex-tab-active {
-  border-color: rgba(120, 214, 255, 0.44);
-  background: rgba(116, 228, 255, 0.16);
-  color: var(--color-text-primary);
+  background: var(--color-primary);
+  color: white;
+  border-color: var(--color-primary);
 }
 
 .pokedex-chip {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
   gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
   border-radius: 999px;
-  border: 1px solid rgba(120, 214, 255, 0.18);
-  background: rgba(255, 255, 255, 0.04);
-  padding: 0.35rem 0.75rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  background: var(--color-bg-surface-soft);
   color: var(--color-text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+  border: 1px solid var(--color-border);
+  text-transform: none;
+  letter-spacing: 0;
 }
-
-/* ============================================================
-   POKEDEX — FORMULAIRES (recherche, sélecteurs, toggles)
-   ============================================================ */
 
 .pokedex-field {
   width: 100%;
-  border-radius: 14px;
-  border: 1px solid rgba(120, 214, 255, 0.18);
-  background: rgba(7, 23, 36, 0.32);
-  padding: 0.8rem 0.95rem;
+  height: 44px;
+  padding: 0 1rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border-strong);
+  background: var(--color-bg-surface);
   color: var(--color-text-primary);
   outline: none;
-  transition: border-color 150ms ease, background-color 150ms ease;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
 }
 
 .pokedex-field::placeholder {
@@ -224,384 +677,108 @@ textarea {
 }
 
 .pokedex-field:focus {
-  border-color: rgba(120, 214, 255, 0.42);
-  background: rgba(7, 23, 36, 0.42);
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-soft);
 }
 
 .pokedex-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 14px;
-  border: 1px solid rgba(120, 214, 255, 0.18);
-  background: rgba(255, 255, 255, 0.03);
-  padding: 0.8rem 1rem;
-  font-size: 0.82rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  background: var(--color-bg-surface);
+  border: 1px solid var(--color-border-strong);
   color: var(--color-text-secondary);
-  transition: border-color 150ms ease, background-color 150ms ease, color 150ms ease;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  cursor: pointer;
+  transition: all 150ms ease;
 }
 
 .pokedex-toggle-active {
-  border-color: rgba(120, 214, 255, 0.42);
-  background: rgba(116, 228, 255, 0.14);
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+}
+
+/* Stage / effets "tech" neutralisés (plus d'aura, plus de scanline) */
+.pokedex-stage {
+  position: relative;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-lg);
+  min-height: auto;
+}
+
+.pokedex-stage::before,
+.pokedex-stage::after,
+.pokedex-corners,
+.pokedex-corners-alt,
+.pokedex-stage-number,
+.pokedex-stage-aura,
+.pokedex-stage-platform {
+  display: none !important;
+}
+
+.pokedex-stage-title {
+  text-shadow: none;
   color: var(--color-text-primary);
 }
 
-/* ============================================================
-   POKEDEX STAGE — COULEUR D'ACCENT PAR GÉNÉRATION
-   ============================================================
-   La variable --stage-accent pilote tous les effets (aura, platform,
-   titre, coins, scanline). Elle change selon data-gen sur la stage.
-   ============================================================ */
-
-.pokedex-stage                    { --stage-accent: 116, 228, 255; } /* fallback cyan */
-.pokedex-stage[data-gen="GEN_1"]  { --stage-accent: 230, 98, 98;   }
-.pokedex-stage[data-gen="GEN_2"]  { --stage-accent: 226, 174, 79;  }
-.pokedex-stage[data-gen="GEN_3"]  { --stage-accent: 120, 192, 122; }
-.pokedex-stage[data-gen="GEN_4"]  { --stage-accent: 168, 130, 216; }
-.pokedex-stage[data-gen="GEN_5"]  { --stage-accent: 90, 168, 236;  }
-.pokedex-stage[data-gen="GEN_6"]  { --stage-accent: 232, 120, 168; }
-.pokedex-stage[data-gen="GEN_7"]  { --stage-accent: 242, 146, 86;  }
-.pokedex-stage[data-gen="GEN_8"]  { --stage-accent: 148, 208, 232; }
-.pokedex-stage[data-gen="GEN_9"]  { --stage-accent: 220, 92, 120;  }
-
-/* ============================================================
-   POKEDEX STAGE — CONTENEUR PRINCIPAL (scène du Pokémon actif)
-   ============================================================ */
-
-.pokedex-stage {
-  position: relative;
-  min-height: 620px;
-  background:
-          radial-gradient(circle at 26% 35%, rgba(116, 228, 255, 0.16), transparent 18%),
-          linear-gradient(180deg, rgba(24, 82, 121, 0.44) 0%, rgba(10, 36, 59, 0.30) 100%);
-}
-
-/* Voile diagonal de lumière sur la gauche */
-.pokedex-stage::before {
-  content: '';
-  position: absolute;
-  left: -8%;
-  top: 12%;
-  width: 84%;
-  height: 58%;
-  opacity: 0.95;
-  pointer-events: none;
-  clip-path: polygon(0 0, 100% 18%, 100% 82%, 0 100%);
-  background: linear-gradient(
-          90deg,
-          rgba(120, 214, 255, 0.24) 0%,
-          rgba(120, 214, 255, 0.08) 54%,
-          transparent 100%
-  );
-}
-
-/* Halos de reflets diffus */
-.pokedex-stage::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background:
-          radial-gradient(circle at 20% 50%, rgba(255, 255, 255, 0.08), transparent 18%),
-          radial-gradient(circle at 18% 18%, rgba(116, 228, 255, 0.12), transparent 16%);
-}
-
-/* ============================================================
-   POKEDEX STAGE — EFFETS DÉCORATIFS
-   ============================================================ */
-
-/* --- Coins "viseur" sur la stage (4 angles techniques) --- */
-
-.pokedex-corners,
-.pokedex-corners-alt {
-  position: absolute;
-  inset: 1rem;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.pokedex-corners::before,
-.pokedex-corners::after,
-.pokedex-corners-alt::before,
-.pokedex-corners-alt::after {
-  content: '';
-  position: absolute;
-  width: 28px;
-  height: 28px;
-  border-color: rgba(var(--stage-accent), 0.55);
-  border-style: solid;
-  border-width: 0;
-  transition: border-color 600ms ease;
-}
-
-.pokedex-corners::before {
-  top: 0;
-  left: 0;
-  border-top-width: 2px;
-  border-left-width: 2px;
-}
-
-.pokedex-corners::after {
-  bottom: 0;
-  right: 0;
-  border-bottom-width: 2px;
-  border-right-width: 2px;
-}
-
-.pokedex-corners-alt::before {
-  top: 0;
-  right: 0;
-  border-top-width: 2px;
-  border-right-width: 2px;
-}
-
-.pokedex-corners-alt::after {
-  bottom: 0;
-  left: 0;
-  border-bottom-width: 2px;
-  border-left-width: 2px;
-}
-
-/* --- Numéro géant en filigrane derrière le Pokémon --- */
-
-.pokedex-stage-number {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  font-size: clamp(14rem, 32vw, 28rem);
-  font-weight: 900;
-  font-family: ui-monospace, 'Courier New', monospace;
-  line-height: 0.82;
-  color: rgba(255, 255, 255, 0.035);
-  letter-spacing: -0.04em;
-  pointer-events: none;
-  user-select: none;
-  z-index: 0;
-  white-space: nowrap;
-  text-shadow: 0 0 60px rgba(var(--stage-accent), 0.08);
-  transition: color 600ms ease, text-shadow 600ms ease;
-}
-
-/* --- Scanline qui traverse lentement la stage --- */
-
-.pokedex-scanline {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  pointer-events: none;
-  z-index: 2;
-  background: linear-gradient(
-          180deg,
-          transparent 0%,
-          rgba(var(--stage-accent), 0.18) 50%,
-          transparent 100%
-  );
-  filter: blur(1px);
-  animation: pokedex-scan 6s ease-in-out infinite;
-}
-
-@keyframes pokedex-scan {
-  0%   { transform: translateY(-40%); opacity: 0; }
-  10%  { opacity: 1; }
-  90%  { opacity: 1; }
-  100% { transform: translateY(600px); opacity: 0; }
-}
-
-/* --- Aura colorée pulsante sous le Pokémon --- */
-
-.pokedex-stage-aura {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  width: 460px;
-  height: 460px;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 0;
-  border-radius: 999px;
-  background: radial-gradient(
-          circle at center,
-          rgba(var(--stage-accent), 0.28) 0%,
-          rgba(var(--stage-accent), 0.12) 35%,
-          transparent 68%
-  );
-  filter: blur(12px);
-  animation: pokedex-aura-pulse 4.5s ease-in-out infinite;
-  transition: background 600ms ease;
-}
-
-@keyframes pokedex-aura-pulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.85; }
-  50%      { transform: translate(-50%, -50%) scale(1.08); opacity: 1;    }
-}
-
-/* ============================================================
-   POKEDEX STAGE — PLATFORM (cercle au sol) ET POKÉMON
-   ============================================================ */
-
-.pokedex-stage-platform {
-  position: absolute;
-  left: 50%;
-  bottom: 1.6rem;
-  height: 102px;
-  width: 290px;
-  transform: translateX(-50%);
-  border-radius: 999px;
-  border: 1px solid rgba(var(--stage-accent), 0.26);
-  background: radial-gradient(
-          circle at center,
-          rgba(var(--stage-accent), 0.24),
-          rgba(var(--stage-accent), 0.05) 55%,
-          transparent 70%
-  );
-  box-shadow: 0 0 48px rgba(var(--stage-accent), 0.22);
-  transition: background 600ms ease, border-color 600ms ease, box-shadow 600ms ease;
-}
-
-.pokedex-stage-platform::before,
-.pokedex-stage-platform::after {
-  content: '';
-  position: absolute;
-  left: 50%;
-  border-radius: 999px;
-  transform: translateX(-50%);
-}
-
-.pokedex-stage-platform::before {
-  bottom: 16px;
-  width: 210px;
-  height: 62px;
-  border: 1px solid rgba(var(--stage-accent), 0.3);
-}
-
-.pokedex-stage-platform::after {
-  bottom: 32px;
-  width: 92px;
-  height: 28px;
-  background: rgba(var(--stage-accent), 0.22);
-  border: 1px solid rgba(var(--stage-accent), 0.22);
-}
-
-/* --- Pokémon : flottement + fade-in à chaque changement --- */
-
 .pokedex-stage-sprite {
-  animation:
-          pokedex-float 4s ease-in-out infinite,
-          pokedex-enter 420ms ease-out both;
+  animation: none;
 }
 
-@keyframes pokedex-float {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-12px); }
-}
-
-@keyframes pokedex-enter {
-  0%   { opacity: 0; transform: translateY(14px) scale(0.96); }
-  100% { opacity: 1; transform: translateY(0)    scale(1);    }
-}
-
-/* --- Glow subtil sur le titre du Pokémon actif --- */
-
-.pokedex-stage-title {
-  text-shadow: 0 0 32px rgba(var(--stage-accent), 0.35);
-}
-
-/* ============================================================
-   POKEDEX GRID — TUILES DE LA LISTE DE POKÉMON
-   ============================================================ */
-
+/* Grille : fallback sur le style home-pokemon-card */
 .pokedex-grid-tile {
   position: relative;
   display: flex;
-  aspect-ratio: 1 / 1;
   flex-direction: column;
-  gap: 0.35rem;
-  border-radius: 16px;
-  border: 1px solid rgba(120, 214, 255, 0.16);
-  background: linear-gradient(180deg, rgba(26, 79, 117, 0.84) 0%, rgba(17, 54, 82, 0.90) 100%);
-  padding: 0.55rem;
-  overflow: hidden;
-  transition: transform 150ms ease, border-color 150ms ease, background-color 150ms ease;
+  align-items: center;
+  background: var(--color-bg-surface);
+  border-radius: var(--radius-md);
+  border: none;
+  padding: 0.85rem 0.55rem 0.9rem;
+  box-shadow: var(--shadow-card);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  aspect-ratio: auto;
+  gap: 0.25rem;
 }
 
 .pokedex-grid-tile:hover {
-  transform: translateY(-2px);
-  border-color: rgba(120, 214, 255, 0.36);
+  transform: translateY(-3px);
+  border-color: transparent;
+  box-shadow: var(--shadow-card-hover);
 }
 
-/* Reflet diagonal au survol */
-.pokedex-grid-tile::after {
-  content: '';
-  position: absolute;
-  inset: -1px;
-  border-radius: 16px;
-  pointer-events: none;
-  background: linear-gradient(
-          135deg,
-          transparent 40%,
-          rgba(120, 214, 255, 0.10) 50%,
-          transparent 60%
-  );
-  opacity: 0;
-  transition: opacity 220ms ease;
+.pokedex-grid-tile::after,
+.pokedex-grid-tile-active::before {
+  display: none !important;
 }
-
-.pokedex-grid-tile:hover::after {
-  opacity: 1;
-}
-
-/* --- Tuile active (Pokémon sélectionné dans la grille) --- */
 
 .pokedex-grid-tile-active {
-  border-color: rgba(120, 214, 255, 0.48);
-  background: linear-gradient(180deg, rgba(36, 102, 146, 0.94) 0%, rgba(17, 65, 96, 0.96) 100%);
+  background: var(--color-primary-softer);
+  box-shadow: 0 0 0 2px var(--color-primary) inset, var(--shadow-card-hover);
   transform: translateY(-2px);
-  box-shadow:
-          inset 0 0 0 1px rgba(201, 251, 255, 0.14),
-          0 0 24px rgba(116, 228, 255, 0.30),
-          0 12px 28px rgba(0, 0, 0, 0.35);
 }
-
-/* Bordure interne qui "respire" lorsqu'une tuile est active */
-.pokedex-grid-tile-active::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 16px;
-  pointer-events: none;
-  border: 1px solid rgba(201, 251, 255, 0.32);
-  animation: pokedex-tile-breathe 2.2s ease-in-out infinite;
-}
-
-@keyframes pokedex-tile-breathe {
-  0%, 100% { opacity: 0.6; }
-  50%      { opacity: 1;   }
-}
-
-/* --- Éléments internes d'une tuile --- */
 
 .pokedex-grid-number {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--color-text-secondary);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--color-text-muted);
 }
 
 .pokedex-grid-status {
   height: 0.5rem;
   width: 0.5rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.22);
+  background: var(--color-border-strong);
 }
 
 .pokedex-grid-status-active {
-  background: var(--color-accent);
-  box-shadow: 0 0 10px rgba(116, 228, 255, 0.35);
+  background: var(--color-primary);
+  box-shadow: 0 0 0 2px var(--color-primary-soft);
 }

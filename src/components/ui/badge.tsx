@@ -1,22 +1,49 @@
 import { cn } from '@/lib/utils/cn';
-import { TYPE_COLORS } from '@/lib/constants/filters';
 
 interface TypeBadgeProps {
     type: string;
     className?: string;
+    /**
+     * Affiche le label en français (défaut) ou laisse la valeur brute.
+     */
+    raw?: boolean;
 }
 
-export function TypeBadge({ type, className }: TypeBadgeProps) {
-    const colorClass = TYPE_COLORS[type.toLowerCase()] ?? 'bg-gray-500';
+/**
+ * Libellés français officiels des 18 types Pokémon.
+ */
+const TYPE_LABELS_FR: Record<string, string> = {
+    normal:   'Normal',
+    fire:     'Feu',
+    water:    'Eau',
+    grass:    'Plante',
+    electric: 'Électrik',
+    ice:      'Glace',
+    fighting: 'Combat',
+    poison:   'Poison',
+    ground:   'Sol',
+    flying:   'Vol',
+    psychic:  'Psy',
+    bug:      'Insecte',
+    rock:     'Roche',
+    ghost:    'Spectre',
+    dragon:   'Dragon',
+    dark:     'Ténèbres',
+    steel:    'Acier',
+    fairy:    'Fée',
+};
+
+/**
+ * Badge de type Pokémon avec couleur officielle.
+ * Style Pokémon HOME : pastille arrondie, couleurs d'origine Nintendo.
+ */
+export function TypeBadge({ type, className, raw = false }: TypeBadgeProps) {
+    const key = type.toLowerCase();
+    const label = raw ? type : (TYPE_LABELS_FR[key] ?? type);
+
     return (
-        <span
-            className={cn(
-                'inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold uppercase tracking-wide text-white',
-                colorClass,
-                className
-            )}
-        >
-      {type}
-    </span>
+        <span className={cn('home-type-badge', `home-type-${key}`, className)}>
+            {label}
+        </span>
     );
 }

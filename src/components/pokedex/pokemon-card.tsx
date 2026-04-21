@@ -7,58 +7,47 @@ interface PokemonCardProps {
     pokemon: PokemonListItem;
 }
 
-
 function formatDexNumber(n: number): string {
-    return `#${String(n).padStart(4, '0')}`;
+    return `N° ${String(n).padStart(4, '0')}`;
 }
 
+/**
+ * Tuile d'un Pokémon dans la grille du Pokédex.
+ * Style Pokémon HOME (GuideBook) : card blanche arrondie, ombre douce,
+ * image centrée, numéro national au-dessus du nom.
+ */
 export function PokemonCard({ pokemon }: PokemonCardProps) {
+    const fallbackSprite =
+        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`;
+    const spriteSrc = pokemon.spriteUrl ?? fallbackSprite;
+
+    const cardClassName = pokemon.implemented
+        ? 'home-pokemon-card'
+        : 'home-pokemon-card home-pokemon-card-empty';
+
     return (
-        <Link
-            href={ROUTES.pokemon(pokemon.slug)}
-            className="group block rounded-xl border p-4 transition-all duration-200 hover:-translate-y-1 hover:border-red-500/50"
-            style={{
-                backgroundColor: 'var(--color-bg-card)',
-                borderColor: 'var(--color-border)',
-            }}
-        >
-            {/* Sprite */}
-            <div className="relative flex items-center justify-center h-24 mb-3">
+        <Link href={ROUTES.pokemon(pokemon.slug)} className={cardClassName}>
+            <div className="home-pokemon-card-image">
                 {pokemon.implemented ? (
                     <Image
-                        src={pokemon.spriteUrl ?? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`}
+                        src={spriteSrc}
                         alt={pokemon.displayName}
                         width={96}
                         height={96}
-                        className="object-contain drop-shadow-lg group-hover:scale-110 transition-transform duration-200"
                         unoptimized
                     />
                 ) : (
-                    <div className="w-16 h-16 rounded-full bg-white/5 flex items-center justify-center">
-                        <span className="text-2xl opacity-30">?</span>
-                    </div>
+                    <div className="home-pokemon-card-placeholder">?</div>
                 )}
             </div>
 
-            {/* Infos */}
-            <div className="text-center space-y-1">
-                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                    {formatDexNumber(pokemon.nationalDexNumber)}
-                </p>
-                <p className="font-semibold text-white text-sm truncate">{pokemon.displayName}</p>
-                <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-                    {pokemon.generationCode?.replace('generation', 'Gén. ') ?? '—'}
-                </p>
-            </div>
+            <span className="home-pokemon-card-dex">
+                {formatDexNumber(pokemon.nationalDexNumber)}
+            </span>
 
-            {/* Badge non implémenté */}
-            {!pokemon.implemented && (
-                <div className="mt-2 text-center">
-          <span className="text-xs px-2 py-0.5 rounded-full bg-white/5 text-gray-500">
-            Non implémenté
-          </span>
-                </div>
-            )}
+            <span className="home-pokemon-card-name">
+                {pokemon.displayName}
+            </span>
         </Link>
     );
 }
