@@ -7,11 +7,11 @@ interface PokemonGridProps {
 
 /**
  * Grille responsive de Pokémon (style Pokémon HOME GuideBook).
- * - 2 colonnes en mobile
- * - 3 en tablette étroite
- * - 4 en tablette
- * - 5 en desktop
- * - 6 en grand écran
+ *
+ * La densité est gérée en CSS via `.home-pokemon-grid` :
+ * `repeat(auto-fill, minmax(110–130px, 1fr))` selon le breakpoint.
+ * Résultat : la grille s'adapte seule à la largeur disponible,
+ * sans dépendre des classes Tailwind `grid-cols-*`.
  */
 export function PokemonGrid({ pokemon }: PokemonGridProps) {
     if (pokemon.length === 0) {
@@ -26,7 +26,7 @@ export function PokemonGrid({ pokemon }: PokemonGridProps) {
     }
 
     return (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4 home-fade-in">
+        <div className="home-pokemon-grid home-fade-in">
             {pokemon.map((p) => (
                 <PokemonCard key={p.id} pokemon={p} />
             ))}

@@ -24,7 +24,7 @@ const GENERATIONS = [
     { value: 'GEN_9', label: 'Génération IX' },
 ] as const;
 
-const PAGE_SIZE = 24;
+const PAGE_SIZE = 48;
 
 function PokedexContent() {
     const { filters, updateFilters } = usePokemonFilters();

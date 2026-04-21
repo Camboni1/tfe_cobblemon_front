@@ -248,6 +248,32 @@ textarea {
 }
 
 /* ============================================================
+   HOME — GRILLE POKEMON (densité auto via auto-fill)
+   ============================================================
+   Utilise CSS Grid pur (pas Tailwind) pour une densité fluide
+   qui s'adapte automatiquement à la largeur du conteneur.
+   ============================================================ */
+
+.home-pokemon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+  gap: 6px;
+}
+
+@media (min-width: 640px) {
+  .home-pokemon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .home-pokemon-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+}
+
+/* ============================================================
    HOME — POKEMON CARD (tuile de la grille)
    ============================================================ */
 
@@ -258,21 +284,73 @@ textarea {
   align-items: center;
   justify-content: flex-start;
   background: var(--color-bg-surface);
-  border-radius: var(--radius-md);
-  padding: 0.85rem 0.55rem 0.9rem;
+  border-radius: 14px;
+  padding: 0.45rem 0.3rem 0.6rem;
   box-shadow: var(--shadow-card);
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition:
+          transform 220ms cubic-bezier(0.4, 0, 0.2, 1),
+          box-shadow 220ms cubic-bezier(0.4, 0, 0.2, 1);
   cursor: pointer;
   overflow: hidden;
   text-align: center;
+  isolation: isolate;
 }
 
-.home-pokemon-card:hover {
-  transform: translateY(-3px);
+/* Dégradé de fond très subtil (diagonale blanche → vert menthe discret) */
+.home-pokemon-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+          158deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(234, 247, 241, 0.55) 100%
+  );
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* Halo turquoise qui s'allume derrière l'image au hover */
+.home-pokemon-card::after {
+  content: '';
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.78);
+  width: 78%;
+  aspect-ratio: 1;
+  border-radius: 999px;
+  background: radial-gradient(
+          circle,
+          var(--color-primary-soft) 0%,
+          rgba(212, 240, 229, 0.55) 42%,
+          transparent 72%
+  );
+  opacity: 0;
+  transition:
+          opacity 280ms cubic-bezier(0.4, 0, 0.2, 1),
+          transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.home-pokemon-card:hover,
+.home-pokemon-card:focus-visible {
+  transform: translateY(-4px);
   box-shadow: var(--shadow-card-hover);
+  outline: none;
+}
+
+.home-pokemon-card:hover::after,
+.home-pokemon-card:focus-visible::after {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .home-pokemon-card-image {
+  position: relative;
+  z-index: 1;
   width: 100%;
   aspect-ratio: 1 / 1;
   display: flex;
@@ -282,45 +360,72 @@ textarea {
 }
 
 .home-pokemon-card-image img {
-  max-height: 100%;
+  max-width: 94%;
+  max-height: 94%;
   width: auto;
+  height: auto;
   object-fit: contain;
-  filter: drop-shadow(0 2px 6px rgba(60, 100, 80, 0.15));
-  transition: transform 200ms ease;
+  filter: drop-shadow(0 3px 6px rgba(60, 100, 80, 0.18));
+  transition: transform 280ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.home-pokemon-card:hover .home-pokemon-card-image img {
-  transform: scale(1.06);
+.home-pokemon-card:hover .home-pokemon-card-image img,
+.home-pokemon-card:focus-visible .home-pokemon-card-image img {
+  transform: scale(1.09) translateY(-2px);
 }
 
 .home-pokemon-card-dex {
+  position: relative;
+  z-index: 1;
   display: block;
-  font-size: 0.72rem;
-  font-weight: 500;
+  font-size: 0.62rem;
+  font-weight: 600;
   color: var(--color-text-muted);
-  margin-top: 0.4rem;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.04em;
+  line-height: 1;
+  margin-top: 0.1rem;
+  margin-bottom: 0.2rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .home-pokemon-card-name {
+  position: relative;
+  z-index: 1;
   display: block;
-  font-size: 0.9rem;
-  font-weight: 600;
+  font-size: 0.8rem;
+  font-weight: 700;
   color: var(--color-text-primary);
-  margin-top: 0.15rem;
+  line-height: 1.15;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  padding: 0 0.2rem;
+  transition: color 180ms ease;
+}
+
+.home-pokemon-card:hover .home-pokemon-card-name,
+.home-pokemon-card:focus-visible .home-pokemon-card-name {
+  color: var(--color-primary-strong);
+}
+
+/* Sur grands écrans, on agrandit légèrement la typo pour la lisibilité */
+@media (min-width: 1280px) {
+  .home-pokemon-card-name { font-size: 0.84rem; }
+  .home-pokemon-card-dex  { font-size: 0.64rem; }
 }
 
 .home-pokemon-card-empty {
   opacity: 0.55;
 }
 
+.home-pokemon-card-empty::after {
+  display: none;
+}
+
 .home-pokemon-card-placeholder {
-  width: 56%;
-  height: 56%;
+  width: 60%;
+  height: 60%;
   border-radius: 999px;
   background: var(--color-bg-surface-soft);
   border: 2px dashed var(--color-border-strong);
@@ -328,7 +433,7 @@ textarea {
   align-items: center;
   justify-content: center;
   color: var(--color-text-muted);
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   font-weight: 700;
 }
 

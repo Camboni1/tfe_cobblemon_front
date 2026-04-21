@@ -20,6 +20,52 @@ function buildUrl(path: string, params?: FetchOptions['params']): string {
     return url.toString();
 }
 
+/**
+ * Spring Boot 3.3+ sérialise les `Page<T>` sous la forme :
+ *   { content: [...], page: { number, size, totalElements, totalPages } }
+ *
+ * Notre type frontend `SpringPage<T>` attend le format plat historique :
+ *   { content, totalElements, totalPages, number, size, first, last }
+ *
+ * Cet adapter détecte la forme imbriquée et la remet à plat, de façon
+ * transparente pour tous les endpoints paginés (pokemon, biomes, items, etc.).
+ */
+interface NestedSpringPage<T> {
+    content: T[];
+    page: {
+        number: number;
+        size: number;
+        totalElements: number;
+        totalPages: number;
+    };
+}
+
+function isNestedSpringPage(data: unknown): data is NestedSpringPage<unknown> {
+    if (!data || typeof data !== 'object') return false;
+    const obj = data as Record<string, unknown>;
+    if (!Array.isArray(obj.content)) return false;
+    if (!obj.page || typeof obj.page !== 'object') return false;
+    const page = obj.page as Record<string, unknown>;
+    return (
+        typeof page.number === 'number' &&
+        typeof page.totalElements === 'number' &&
+        typeof page.totalPages === 'number'
+    );
+}
+
+function flattenSpringPage<T>(data: NestedSpringPage<T>) {
+    const { content, page } = data;
+    return {
+        content,
+        totalElements: page.totalElements,
+        totalPages: page.totalPages,
+        number: page.number,
+        size: page.size,
+        first: page.number === 0,
+        last: page.totalPages === 0 || page.number >= page.totalPages - 1,
+    };
+}
+
 export async function apiFetch<T>(path: string, options: FetchOptions = {}): Promise<T> {
     const { method = 'GET', body, params } = options;
 
@@ -41,5 +87,12 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
         return undefined as T;
     }
 
-    return response.json() as Promise<T>;
+    const data: unknown = await response.json();
+
+    // Adapter automatique Spring Boot 3.3+ → format plat
+    if (isNestedSpringPage(data)) {
+        return flattenSpringPage(data) as T;
+    }
+
+    return data as T;
 }
