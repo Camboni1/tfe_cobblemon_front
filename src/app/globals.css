@@ -11,21 +11,27 @@
    ============================================================ */
 
 :root {
-  --color-bg-base: #071523;
-  --color-bg-card: rgba(18, 58, 88, 0.86);
-  --color-bg-card-strong: rgba(16, 64, 97, 0.96);
-  --color-bg-nav: rgba(8, 29, 46, 0.94);
+  /* Fond */
+  --color-bg-base: #c9e6d4;
+  --color-bg-grid: rgba(255, 255, 255, 0.35);
+  --color-bg-surface: #ffffff;
+  --color-bg-soft: #effaf3;
 
-  --color-accent: #74e4ff;
-  --color-accent-strong: #c9fbff;
-  --color-accent-soft: rgba(116, 228, 255, 0.16);
+  /* Accent turquoise HOME */
+  --color-primary: #3ebaa0;
+  --color-primary-strong: #2d9a84;
+  --color-primary-soft: #d4f0e5;
 
-  --color-border: rgba(120, 214, 255, 0.22);
-  --color-border-strong: rgba(120, 214, 255, 0.42);
+  /* Texte */
+  --color-text-primary: #4a5a5a;
+  --color-text-secondary: #7a8a8a;
+  --color-text-muted: #a0b0b0;
 
-  --color-text-primary: #ecfaff;
-  --color-text-secondary: #9cc6db;
-  --color-text-muted: #6e95ad;
+  /* Bordures et ombres douces */
+  --color-border: rgba(120, 180, 160, 0.18);
+  --color-border-strong: rgba(120, 180, 160, 0.35);
+  --shadow-card: 0 1px 3px rgba(60, 100, 80, 0.06),
+  0 6px 16px rgba(60, 100, 80, 0.08);
 }
 
 /* ============================================================
