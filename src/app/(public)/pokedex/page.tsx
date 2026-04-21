@@ -9,7 +9,6 @@ import { usePokemonFilters } from '@/hooks/use-pokemon-filters';
 import { pokemonApi } from '@/lib/api/pokemon.api';
 import { ROUTES } from '@/lib/constants/routes';
 import type { PokemonListItem } from '@/types/api/pokemon.types';
-import {entries} from "eslint-config-next";
 
 const GENERATION_CHOICES = [
     { value: '', label: 'All generations' },
@@ -80,9 +79,10 @@ function PokedexContent() {
         <div className="space-y-4">
             <section className="pokedex-panel px-4 py-3 sm:px-5">
                 <div className="relative z-10 flex flex-col gap-3 xl:flex-row xl:items-center xl:justify-between">
-                    <div className="flex flex-wrap gap-2">
-                        <span className="pokedex-tab pokedex-tab-active">Pokedex</span>
-                        <span className="pokedex-tab">Mega Evolution Pokedex</span>
+                    <div className="flex flex-wrap items-center gap-3">
+                        <span className="pokedex-logo">POKÉDEX</span>
+                        <span className="pokedex-tab pokedex-tab-active">Pokédex</span>
+                        <span className="pokedex-tab">Mega Evolution Pokédex</span>
                     </div>
 
                     <div className="flex flex-wrap items-center gap-2">
