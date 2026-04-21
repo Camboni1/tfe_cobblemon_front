@@ -30,9 +30,6 @@ export function PokemonFormsTabs({ forms, activeFormId, onSelect }: PokemonForms
                         style={form.id !== activeFormId ? { backgroundColor: 'var(--color-bg-card)' } : {}}
                     >
                         {form.displayName}
-                        {form.isDefault && (
-                            <span className="ml-1.5 text-xs opacity-60">(défaut)</span>
-                        )}
                     </button>
                 ))}
             </div>

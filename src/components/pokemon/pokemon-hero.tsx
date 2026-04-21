@@ -9,18 +9,24 @@ interface PokemonHeroProps {
 }
 
 export function PokemonHero({ pokemon, activeForm }: PokemonHeroProps) {
+    const heroImageSrc =
+        activeForm.imageUrl ??
+        pokemon.imageUrl ??
+        pokemon.spriteUrl ??
+        `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`;
+
     return (
         <div
             className="rounded-2xl border p-8 flex flex-col sm:flex-row items-center gap-8"
             style={{ backgroundColor: 'var(--color-bg-card)', borderColor: 'var(--color-border)' }}
         >
-            {/* Sprite */}
+            {/* Grande image */}
             <div className="relative w-40 h-40 flex-shrink-0">
                 <div className="absolute inset-0 rounded-full bg-white/5" />
                 {pokemon.implemented ? (
                     <Image
-                        src={pokemon.spriteUrl ?? `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`}
-                        alt={pokemon.displayName}
+                        src={heroImageSrc}
+                        alt={activeForm.displayName}
                         width={160}
                         height={160}
                         className="object-contain drop-shadow-2xl"
@@ -34,13 +40,13 @@ export function PokemonHero({ pokemon, activeForm }: PokemonHeroProps) {
             {/* Infos */}
             <div className="flex-1 text-center sm:text-left space-y-3">
                 <div className="flex flex-wrap items-center gap-2 justify-center sm:justify-start">
-          <span className="text-sm font-mono" style={{ color: 'var(--color-text-secondary)' }}>
-            {formatDexNumber(pokemon.nationalDexNumber)}
-          </span>
+                    <span className="text-sm font-mono" style={{ color: 'var(--color-text-secondary)' }}>
+                        {formatDexNumber(pokemon.nationalDexNumber)}
+                    </span>
                     {!pokemon.implemented && (
                         <span className="text-xs px-2 py-0.5 rounded-full bg-white/10 text-gray-400">
-              Non implémenté
-            </span>
+                            Non implémenté
+                        </span>
                     )}
                 </div>
 
@@ -52,21 +58,17 @@ export function PokemonHero({ pokemon, activeForm }: PokemonHeroProps) {
                     </p>
                 )}
 
-                {/* Types */}
                 <div className="flex gap-2 justify-center sm:justify-start">
                     <TypeBadge type={activeForm.primaryType} />
-                    {activeForm.secondaryType && (
-                        <TypeBadge type={activeForm.secondaryType} />
-                    )}
+                    {activeForm.secondaryType && <TypeBadge type={activeForm.secondaryType} />}
                 </div>
 
-                {/* Méta */}
                 <p className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
                     {formatGeneration(pokemon.generationCode)}
                     {activeForm.battleOnly && (
                         <span className="ml-3 text-xs px-2 py-0.5 rounded-full bg-yellow-500/20 text-yellow-400">
-              Forme de combat uniquement
-            </span>
+                            Forme de combat uniquement
+                        </span>
                     )}
                 </p>
             </div>

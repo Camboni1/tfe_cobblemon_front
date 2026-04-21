@@ -22,6 +22,7 @@ export interface PokemonForm {
     baseSpecialAttack: number;
     baseSpecialDefense: number;
     baseSpeed: number;
+    imageUrl: string | null;
     drops: PokemonDropItem[];
 }
 
@@ -40,6 +41,7 @@ export interface PokemonDropItem {
 export interface PokemonDetails extends PokemonListItem {
     spriteUrl: string | null;
     iconUrl: string | null;
+    imageUrl: string | null;
     forms: PokemonForm[];
 }
 
