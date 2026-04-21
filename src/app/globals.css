@@ -332,3 +332,230 @@ textarea {
   background: var(--color-accent);
   box-shadow: 0 0 10px rgba(116, 228, 255, 0.35);
 }
+/* ============================================================
+   POKEDEX STAGE — enrichissements
+   ============================================================ */
+
+/* Couleur d'accent par génération, posée sur la stage via data-gen */
+.pokedex-stage[data-gen="GEN_1"]  { --stage-accent: 230, 98, 98;   }
+.pokedex-stage[data-gen="GEN_2"]  { --stage-accent: 226, 174, 79;  }
+.pokedex-stage[data-gen="GEN_3"]  { --stage-accent: 120, 192, 122; }
+.pokedex-stage[data-gen="GEN_4"]  { --stage-accent: 168, 130, 216; }
+.pokedex-stage[data-gen="GEN_5"]  { --stage-accent: 90, 168, 236;  }
+.pokedex-stage[data-gen="GEN_6"]  { --stage-accent: 232, 120, 168; }
+.pokedex-stage[data-gen="GEN_7"]  { --stage-accent: 242, 146, 86;  }
+.pokedex-stage[data-gen="GEN_8"]  { --stage-accent: 148, 208, 232; }
+.pokedex-stage[data-gen="GEN_9"]  { --stage-accent: 220, 92, 120;  }
+
+/* Fallback : la même couleur cyan que la stage actuelle */
+.pokedex-stage { --stage-accent: 116, 228, 255; }
+
+/* Corner brackets (effet viseur) : 4 angles "techniques" sur la stage */
+.pokedex-corners {
+  position: absolute;
+  inset: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+.pokedex-corners::before,
+.pokedex-corners::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: rgba(var(--stage-accent), 0.55);
+  border-style: solid;
+  border-width: 0;
+  transition: border-color 600ms ease;
+}
+.pokedex-corners::before {
+  top: 0; left: 0;
+  border-top-width: 2px;
+  border-left-width: 2px;
+}
+.pokedex-corners::after {
+  bottom: 0; right: 0;
+  border-bottom-width: 2px;
+  border-right-width: 2px;
+}
+.pokedex-corners-alt {
+  position: absolute;
+  inset: 1rem;
+  pointer-events: none;
+  z-index: 1;
+}
+.pokedex-corners-alt::before,
+.pokedex-corners-alt::after {
+  content: '';
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: rgba(var(--stage-accent), 0.55);
+  border-style: solid;
+  border-width: 0;
+  transition: border-color 600ms ease;
+}
+.pokedex-corners-alt::before {
+  top: 0; right: 0;
+  border-top-width: 2px;
+  border-right-width: 2px;
+}
+.pokedex-corners-alt::after {
+  bottom: 0; left: 0;
+  border-bottom-width: 2px;
+  border-left-width: 2px;
+}
+
+/* Numéro géant en filigrane en arrière-plan */
+.pokedex-stage-number {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: clamp(14rem, 32vw, 28rem);
+  font-weight: 900;
+  font-family: ui-monospace, 'Courier New', monospace;
+  line-height: 0.82;
+  color: rgba(255, 255, 255, 0.035);
+  letter-spacing: -0.04em;
+  pointer-events: none;
+  user-select: none;
+  z-index: 0;
+  white-space: nowrap;
+  text-shadow: 0 0 60px rgba(var(--stage-accent), 0.08);
+  transition: color 600ms ease, text-shadow 600ms ease;
+}
+
+/* Scanline qui traverse la stage */
+.pokedex-scanline {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 80px;
+  pointer-events: none;
+  z-index: 2;
+  background: linear-gradient(
+          180deg,
+          transparent 0%,
+          rgba(var(--stage-accent), 0.18) 50%,
+          transparent 100%
+  );
+  filter: blur(1px);
+  animation: pokedex-scan 6s ease-in-out infinite;
+}
+
+@keyframes pokedex-scan {
+  0%   { transform: translateY(-40%); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translateY(600px); opacity: 0; }
+}
+
+/* Aura colorée qui pulse sous le Pokémon */
+.pokedex-stage-aura {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 460px;
+  height: 460px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: 999px;
+  background: radial-gradient(
+          circle at center,
+          rgba(var(--stage-accent), 0.28) 0%,
+          rgba(var(--stage-accent), 0.12) 35%,
+          transparent 68%
+  );
+  filter: blur(12px);
+  animation: pokedex-aura-pulse 4.5s ease-in-out infinite;
+  transition: background 600ms ease;
+}
+
+@keyframes pokedex-aura-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1);    opacity: 0.85; }
+  50%      { transform: translate(-50%, -50%) scale(1.08); opacity: 1;    }
+}
+
+/* Pokémon qui flotte au-dessus de la platform + fade-in à chaque changement */
+.pokedex-stage-sprite {
+  animation: pokedex-float 4s ease-in-out infinite, pokedex-enter 420ms ease-out both;
+}
+
+@keyframes pokedex-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-12px); }
+}
+
+@keyframes pokedex-enter {
+  0%   { opacity: 0; transform: translateY(14px) scale(0.96); }
+  100% { opacity: 1; transform: translateY(0)     scale(1);    }
+}
+
+/* Platform : on remplace son fond par la couleur d'accent dynamique */
+.pokedex-stage-platform {
+  border-color: rgba(var(--stage-accent), 0.26);
+  background:
+          radial-gradient(
+                  circle at center,
+                  rgba(var(--stage-accent), 0.24),
+                  rgba(var(--stage-accent), 0.05) 55%,
+                  transparent 70%
+          );
+  box-shadow: 0 0 48px rgba(var(--stage-accent), 0.22);
+  transition: background 600ms ease, border-color 600ms ease, box-shadow 600ms ease;
+}
+
+/* ============================================================
+   GRID TILES — glow accentué
+   ============================================================ */
+
+.pokedex-grid-tile {
+  overflow: hidden;
+}
+
+.pokedex-grid-tile::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 16px;
+  pointer-events: none;
+  background: linear-gradient(
+          135deg,
+          transparent 40%,
+          rgba(120, 214, 255, 0.10) 50%,
+          transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 220ms ease;
+}
+.pokedex-grid-tile:hover::after {
+  opacity: 1;
+}
+
+.pokedex-grid-tile-active {
+  box-shadow:
+          inset 0 0 0 1px rgba(201, 251, 255, 0.14),
+          0 0 24px rgba(116, 228, 255, 0.30),
+          0 12px 28px rgba(0, 0, 0, 0.35);
+  transform: translateY(-2px);
+}
+.pokedex-grid-tile-active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  pointer-events: none;
+  border: 1px solid rgba(201, 251, 255, 0.32);
+  animation: pokedex-tile-breathe 2.2s ease-in-out infinite;
+}
+
+@keyframes pokedex-tile-breathe {
+  0%, 100% { opacity: 0.6; }
+  50%      { opacity: 1;   }
+}
+
+/* Title du Pokémon actif : glow subtil pour accrocher l'œil */
+.pokedex-stage-title {
+  text-shadow: 0 0 32px rgba(var(--stage-accent), 0.35);
+}

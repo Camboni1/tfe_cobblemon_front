@@ -3,12 +3,13 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
-import { Suspense, useEffect, useState } from 'react';
+import {Suspense, useEffect, useMemo, useState} from 'react';
 import { useDebounce } from '@/hooks/use-debounce';
 import { usePokemonFilters } from '@/hooks/use-pokemon-filters';
 import { pokemonApi } from '@/lib/api/pokemon.api';
 import { ROUTES } from '@/lib/constants/routes';
 import type { PokemonListItem } from '@/types/api/pokemon.types';
+import {entries} from "eslint-config-next";
 
 const GENERATION_CHOICES = [
     { value: '', label: 'All generations' },
@@ -47,7 +48,7 @@ function PokedexContent() {
                 generationCode: filters.generationCode || undefined,
                 implemented: filters.implemented,
                 page: filters.page,
-                size: 25,
+                size: 1200,
             }),
         placeholderData: (prev) => prev,
     });
@@ -92,6 +93,9 @@ function PokedexContent() {
 
             <div className="grid gap-5 xl:grid-cols-[minmax(0,1.02fr)_minmax(430px,0.98fr)]">
                 <section className="pokedex-panel pokedex-stage p-5 sm:p-8">
+                    <div className="pokedex-corners" />
+                    <div className="pokedex-corners-alt" />
+                    <div className="pokedex-scanline" />
                     {activePokemon ? (
                         <div className="relative z-10 flex h-full flex-col">
                             <div className="flex items-center justify-between gap-3">
@@ -104,16 +108,18 @@ function PokedexContent() {
                             </div>
 
                             <div className="relative flex flex-1 items-center justify-center py-8">
+                                <div className="pokedex-stage-aura" />
                                 <div className="pokedex-stage-platform" />
 
                                 {activePokemon.implemented ? (
                                     <Image
-                                        src={imageSrc(activePokemon)}          // ← modifié : imageSrc au lieu de spriteSrc
+                                        key={activePokemon.slug}  /* ← déclenche l'animation d'entrée à chaque switch */
+                                        src={imageSrc(activePokemon)}
                                         alt={activePokemon.displayName}
                                         width={360}
                                         height={360}
                                         unoptimized
-                                        className="relative z-10 max-h-[420px] w-auto object-contain drop-shadow-[0_22px_50px_rgba(0,0,0,0.45)]"
+                                        className="pokedex-stage-sprite relative z-10 max-h-[420px] w-auto object-contain drop-shadow-[0_22px_50px_rgba(0,0,0,0.45)]"
                                     />
                                 ) : (
                                     <div className="relative z-10 flex h-64 w-64 items-center justify-center rounded-full border border-white/10 bg-white/5 text-8xl font-black text-white/20">
@@ -134,7 +140,7 @@ function PokedexContent() {
                                         {activePokemon.implemented ? 'Entry ready' : 'Entry incomplete'}
                                     </span>
 
-                                    <h1 className="mt-3 text-3xl font-black text-white sm:text-4xl">
+                                    <h1 className="pokedex-stage-title mt-3 text-3xl font-black text-white sm:text-4xl">
                                         {activePokemon.displayName}
                                     </h1>
 
@@ -297,8 +303,8 @@ function PokedexContent() {
 
                         {!isLoading && !isError && entries.length > 0 && (
                             <>
-                                <div className="mt-4 grid grid-cols-3 gap-3 sm:grid-cols-4 xl:grid-cols-5">
-                                    {entries.map((pokemon) => {
+                                <div className="mt-4 grid grid-cols-8 gap-3 max-[1084px]:grid-cols-5 max-[680px]:grid-cols-4 xl:grid-cols-5">
+                                    {sortedEntries.map((pokemon) => {
                                         const isActive = activePokemon?.slug === pokemon.slug;
 
                                         return (
@@ -323,10 +329,10 @@ function PokedexContent() {
                                                         <Image
                                                             src={spriteSrc(pokemon)}
                                                             alt={pokemon.displayName}
-                                                            width={72}
-                                                            height={72}
+                                                            width={80}
+                                                            height={80}
                                                             unoptimized
-                                                            className="max-h-[72px] w-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.35)]"
+                                                            className="max-h-[80px] w-auto object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.35)]"
                                                         />
                                                     ) : (
                                                         <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/5 text-2xl font-black text-white/25">
@@ -446,3 +452,9 @@ function formatGeneration(code: string): string {
     const match = code.match(/\d+/);
     return match ? `GEN ${match[0]}` : code.toUpperCase();
 }
+
+const sortedEntries = useMemo(() => {
+    return [...entries].sort(
+        (a, b) => a.nationalDexNumber - b.nationalDexNumber
+    );
+}, [entries]);
