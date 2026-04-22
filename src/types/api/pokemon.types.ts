@@ -1,3 +1,20 @@
+/** Sprites 2D Pokémon Home (matche PokemonSpriteSet côté back). */
+export interface PokemonSpriteSet {
+    defaultUrl: string | null;
+    shinyUrl: string | null;
+    femaleUrl: string | null;
+    shinyFemaleUrl: string | null;
+}
+
+/** Modèle 3D Cobblemon + textures associées (matche PokemonModelAssets côté back). */
+export interface PokemonModelAssets {
+    modelUrl: string | null;
+    textureUrl: string | null;
+    textureShinyUrl: string | null;
+    textureFemaleUrl: string | null;
+    textureShinyFemaleUrl: string | null;
+}
+
 export interface PokemonListItem {
     id: number;
     slug: string;
@@ -5,8 +22,7 @@ export interface PokemonListItem {
     nationalDexNumber: number;
     generationCode: string;
     implemented: boolean;
-    spriteUrl: string | null;
-    imageUrl: string | null;
+    homeSprites: PokemonSpriteSet;
 }
 
 export interface PokemonForm {
@@ -23,7 +39,8 @@ export interface PokemonForm {
     baseSpecialAttack: number;
     baseSpecialDefense: number;
     baseSpeed: number;
-    imageUrl: string | null;
+    homeSprites: PokemonSpriteSet;
+    model: PokemonModelAssets;
     drops: PokemonDropItem[];
 }
 
@@ -40,9 +57,7 @@ export interface PokemonDropItem {
 }
 
 export interface PokemonDetails extends PokemonListItem {
-    spriteUrl: string | null;
-    iconUrl: string | null;
-    imageUrl: string | null;
+    model: PokemonModelAssets;
     forms: PokemonForm[];
 }
 

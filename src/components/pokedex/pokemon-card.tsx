@@ -19,7 +19,7 @@ function formatDexNumber(n: number): string {
 export function PokemonCard({ pokemon }: PokemonCardProps) {
     const fallbackSprite =
         `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`;
-    const spriteSrc = pokemon.spriteUrl ?? fallbackSprite;
+    const spriteSrc = pokemon.homeSprites.defaultUrl ?? fallbackSprite;
 
     const cardClassName = pokemon.implemented
         ? 'home-pokemon-card'

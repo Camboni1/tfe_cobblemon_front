@@ -1,3 +1,5 @@
+'use client';
+
 import { cn } from '@/lib/utils/cn';
 import type { PokemonForm } from '@/types/api/pokemon.types';
 
@@ -11,28 +13,30 @@ export function PokemonFormsTabs({ forms, activeFormId, onSelect }: PokemonForms
     if (forms.length <= 1) return null;
 
     return (
-        <div className="space-y-2">
-            <h2 className="text-sm font-semibold uppercase tracking-wider"
-                style={{ color: 'var(--color-text-secondary)' }}>
-                Formes
-            </h2>
+        <section className="home-panel home-fade-in space-y-3">
+            <h2 className="home-section-title">Formes</h2>
             <div className="flex flex-wrap gap-2">
-                {forms.map((form) => (
-                    <button
-                        key={form.id}
-                        onClick={() => onSelect(form)}
-                        className={cn(
-                            'px-4 py-2 rounded-lg text-sm font-medium border transition-all',
-                            form.id === activeFormId
-                                ? 'bg-red-600 border-red-600 text-white'
-                                : 'border-[var(--color-border)] text-[var(--color-text-secondary)] hover:border-red-500/50 hover:text-white'
-                        )}
-                        style={form.id !== activeFormId ? { backgroundColor: 'var(--color-bg-card)' } : {}}
-                    >
-                        {form.displayName}
-                    </button>
-                ))}
+                {forms.map((form) => {
+                    const isActive = form.id === activeFormId;
+                    return (
+                        <button
+                            key={form.id}
+                            type="button"
+                            onClick={() => onSelect(form)}
+                            className={cn(
+                                'home-toggle',
+                                isActive && 'home-toggle-active',
+                            )}
+                            aria-pressed={isActive}
+                        >
+                            {form.displayName}
+                            {form.battleOnly && (
+                                <span className="ml-1 opacity-70 text-[0.7rem]">⚔</span>
+                            )}
+                        </button>
+                    );
+                })}
             </div>
-        </div>
+        </section>
     );
 }

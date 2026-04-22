@@ -1,3 +1,6 @@
+'use client';
+
+import { useState } from 'react';
 import Image from 'next/image';
 import { TypeBadge } from '@/components/ui/badge';
 import { formatDexNumber, formatGeneration } from '@/lib/utils/pokemon';
@@ -9,11 +12,23 @@ interface PokemonHeroProps {
 }
 
 export function PokemonHero({ pokemon, activeForm }: PokemonHeroProps) {
+    const [shiny, setShiny] = useState(false);
+    const [female, setFemale] = useState(false);
+
+    const sprites = activeForm.homeSprites ?? pokemon.homeSprites;
+
+    const pickSprite = () => {
+        if (shiny && female && sprites.shinyFemaleUrl) return sprites.shinyFemaleUrl;
+        if (shiny && sprites.shinyUrl) return sprites.shinyUrl;
+        if (female && sprites.femaleUrl) return sprites.femaleUrl;
+        return sprites.defaultUrl;
+    };
+
     const heroImageSrc =
-        activeForm.imageUrl ??
-        pokemon.imageUrl ??
-        pokemon.spriteUrl ??
+        pickSprite() ??
         `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemon.nationalDexNumber}.png`;
+
+    const hasFemaleVariant = Boolean(sprites.femaleUrl);
 
     return (
         <div
@@ -71,6 +86,34 @@ export function PokemonHero({ pokemon, activeForm }: PokemonHeroProps) {
                         </span>
                     )}
                 </p>
+
+                {/* Switcher shiny / femelle */}
+                <div className="flex gap-2 justify-center sm:justify-start pt-2">
+                    <button
+                        type="button"
+                        onClick={() => setShiny((s) => !s)}
+                        className={`text-xs px-3 py-1 rounded-full border transition ${
+                            shiny
+                                ? 'bg-yellow-400/20 border-yellow-400 text-yellow-200'
+                                : 'bg-white/5 border-white/10 text-gray-300'
+                        }`}
+                    >
+                        ✦ Shiny
+                    </button>
+                    {hasFemaleVariant && (
+                        <button
+                            type="button"
+                            onClick={() => setFemale((f) => !f)}
+                            className={`text-xs px-3 py-1 rounded-full border transition ${
+                                female
+                                    ? 'bg-pink-400/20 border-pink-400 text-pink-200'
+                                    : 'bg-white/5 border-white/10 text-gray-300'
+                            }`}
+                        >
+                            ♀ Femelle
+                        </button>
+                    )}
+                </div>
             </div>
         </div>
     );
